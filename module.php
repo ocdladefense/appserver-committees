@@ -27,7 +27,7 @@ class CommitteeModule extends Module {
 
         $page = new Template("page");
         $page->addPath(__DIR__ . "/templates");
-        
+
         return $page->render([
             "documents" => $docsHtml,
             "members" => $membersHtml
@@ -38,7 +38,8 @@ class CommitteeModule extends Module {
 
         $api = loadApi();
 
-        $docIds = $api->query("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = '$committeeId'")->getQueryResult()->getField("ContentDocumentId");
+        $result = $api->query("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = '$committeeId'")->getQueryResult();
+        $docIds = $result->getField("ContentDocumentId");
 
         $format = "SELECT Id, Title, ContentSize, FileType, FileExtension FROM ContentDocument WHERE Id in (:array)";
         $query = DbHelper::parseArray($format, $docIds);

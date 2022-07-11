@@ -4,6 +4,7 @@
 	"description": "This is a module for displaying committee information.",
     "connectedApp":"default",
 	"files": [],
+    "dependencies":["file-service"],
 	"routes": {
         "committee/test":{
             "callback":"test",
