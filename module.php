@@ -16,15 +16,22 @@ class CommitteeModule extends Module {
         $committeeId = loadApi()->query("Select Id FROM Committee__c WHERE Name = '$committeeName'")->getRecord()["Id"];
 
         $documents = $this->getCommitteeDocuments($committeeId);
+        $docsTemplate = new Template("documents");
+        $docsTemplate->addPath(__DIR__ . "/templates");
+        $docsHtml = $docsTemplate->render(["documents" => $documents]);
 
         $members = $this->getCommitteeMembers($committeeId);
+        $membersTemplate = new Template("members");
+        $membersTemplate->addPath(__DIR__ . "/templates");
+        $membersHtml = $membersTemplate->render(["members" => $members]);
 
-        $list = new Template("document-list");
-        $list->addPath(__DIR__ . "/templates");
-
-        return $list->render(["documents" => $documents]);
-
-        var_dump($documents);exit;
+        $page = new Template("page");
+        $page->addPath(__DIR__ . "/templates");
+        
+        return $page->render([
+            "documents" => $docsHtml,
+            "members" => $membersHtml
+        ]);
     }
 
     public function getCommitteeDocuments($committeeId) {
