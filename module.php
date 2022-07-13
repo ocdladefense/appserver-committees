@@ -2,18 +2,21 @@
 
 use Mysql\DbHelper;
 
-class CommitteeModule extends Module {
+class CommitteesModule extends Module {
 
     public function __construct() {
 
         parent::__construct();
     }
+    
 
-    public function test() {
 
-        $committeeName = "Web Governance";
-
-        $committeeId = loadApi()->query("Select Id FROM Committee__c WHERE Name = '$committeeName'")->getRecord()["Id"];
+    public function test($name = "web-governance") {
+        
+        $committeeName = Identifier::format($name);
+        print $$committeeName; exit;
+        
+        $committeeId = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$committeeName'")->getRecord()["Id"];
 
         $documents = $this->getCommitteeDocuments($committeeId);
         $docsTemplate = new Template("documents");
