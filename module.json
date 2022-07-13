@@ -1,12 +1,12 @@
 {
 	"comment": "This is a module for displaying committee information",
-	"name": "committee", 
+	"name": "committees", 
 	"description": "This is a module for displaying committee information.",
     "connectedApp":"default",
 	"files": [],
     "dependencies":["file-service"],
 	"routes": {
-        "committee/test":{
+        "committee/%name":{
             "callback":"test",
             "content-type":"text/html"
         }
