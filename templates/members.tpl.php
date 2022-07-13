@@ -1,9 +1,13 @@
 <h1 class="list-header">Committee Members</h1>
 
-<br />
 
-<div>
+
+<ul>
     <?php foreach($members as $member) : ?>
-        <p><?php print $member["Name"] ." - ". $member["role"]; ?></p>
+        <li>
+            <a href="/directory/members/<?php print $member["Id"]; ?>">
+                <?php print $member["Name"] ." - ". $member["role"]; ?>
+            </a>
+        </li>
     <?php endforeach; ?>
-</div>
+</ul>
