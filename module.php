@@ -10,20 +10,19 @@ class CommitteesModule extends Module {
     }
     
 
-
-    public function test($name = "web-governance") {
+    public function view($name = "web-governance") {
         
-        $committeeName = Identifier::format($name);
-        print $$committeeName; exit;
+        $cname = Identifier::format($name, "human");
+        // print $committeeName; exit;
         
-        $committeeId = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$committeeName'")->getRecord()["Id"];
+        $id = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$cname'")->getRecord()["Id"];
 
-        $documents = $this->getCommitteeDocuments($committeeId);
+        $documents = $this->getDocuments($id);
         $docsTemplate = new Template("documents");
         $docsTemplate->addPath(__DIR__ . "/templates");
         $docsHtml = $docsTemplate->render(["documents" => $documents]);
 
-        $members = $this->getCommitteeMembers($committeeId);
+        $members = $this->getMembers($id);
         $membersTemplate = new Template("members");
         $membersTemplate->addPath(__DIR__ . "/templates");
         $membersHtml = $membersTemplate->render(["members" => $members]);
@@ -37,11 +36,11 @@ class CommitteesModule extends Module {
         ]);
     }
 
-    public function getCommitteeDocuments($committeeId) {
+    public function getDocuments($id) {
 
         $api = loadApi();
 
-        $result = $api->query("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = '$committeeId'")->getQueryResult();
+        $result = $api->query("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = '$id'")->getQueryResult();
         $docIds = $result->getField("ContentDocumentId");
 
         $format = "SELECT Id, Title, ContentSize, FileType, FileExtension FROM ContentDocument WHERE Id in (:array)";
@@ -56,14 +55,14 @@ class CommitteesModule extends Module {
         return $docs;
     }
 
-    public function getCommitteeMembers($committeeId) {
+    public function getMembers($id) {
 
-        $query = "SELECT id, Name, (SELECT Contact__r.Id, Contact__r.Title, Contact__r.Name, Role__c, Contact__r.Ocdla_Home_City__c, Contact__r.Email, Contact__r.Phone FROM Relationships__r) FROM Committee__c WHERE Id = '$committeeId'";
+        $query = "SELECT id, Name, (SELECT Contact__r.Id, Contact__r.Title, Contact__r.Name, Role__c, Contact__r.Ocdla_Home_City__c, Contact__r.Email, Contact__r.Phone FROM Relationships__r) FROM Committee__c WHERE Id = '$id'";
 
-        $memberRecords = loadApi()->query($query)->getRecord()["Relationships__r"]["records"];
+        $members = loadApi()->query($query)->getRecord()["Relationships__r"]["records"];
 
         $contacts = [];
-        foreach ($memberRecords as $member) {
+        foreach($members as $member) {
 
             $data = $member["Contact__r"];
             $contacts[$data["Id"]] = $data;

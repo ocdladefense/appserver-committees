@@ -6,8 +6,12 @@
 	"files": [],
     "dependencies":["file-service"],
 	"routes": {
+        "committees":{
+            "callback":"list",
+            "content-type":"text/html"
+        },
         "committee/%name":{
-            "callback":"test",
+            "callback":"view",
             "content-type":"text/html"
         }
     }
