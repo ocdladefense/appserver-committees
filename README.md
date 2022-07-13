@@ -1,1 +1,1 @@
-# Committee Module
+# Committees Module
