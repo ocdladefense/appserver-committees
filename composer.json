@@ -1,8 +1,13 @@
 {
-    "name": "ocdladefense/project",
-    "description": "",
+    "name": "ocdladefense/appserver-committees",
+    "description": "Browse committee-specific pages.",
     "type": "wordpress-theme",
     "license": "MIT",
-    "authors": [],
-    "require": {}
+    "authors": [
+        {
+            "name": "Trevor Uehlin",
+            "role": "Developer",
+            "email": "trevoruehlinx1@gmail.com"
+        }
+    ]
 }

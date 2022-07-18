@@ -21,7 +21,8 @@
             <?php foreach($documents as $id => $doc): ?>
                 
                 <div class="table-row data">
-                <p class="table-cell"><?php print $doc["targetNames"]; ?></p>
+                    
+                    <p class="table-cell"><?php print $doc["targetNames"]; ?></p>
                     <p class="table-cell">
                         <a href="/file/download/<?php print $id; ?>"><?php print $doc["Title"]; ?></a>
                     </p>

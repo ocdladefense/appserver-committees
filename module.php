@@ -18,6 +18,15 @@ class CommitteesModule extends Module {
         $id = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$cname'")->getRecord()["Id"];
 
         $documents = $this->getDocuments($id);
+
+        /*
+        if($targets->count() == 0) {
+			$tpl = new Template("no-records");
+			$tpl->addPath(__DIR__ . "/templates");
+			return $tpl;
+		}
+        */
+
         $docsTemplate = new Template("documents");
         $docsTemplate->addPath(__DIR__ . "/templates");
         $docsHtml = $docsTemplate->render(["documents" => $documents]);
