@@ -48,6 +48,10 @@
         padding-left:13px;
         padding-right:13px;
     }
+
+    .icon-cell {
+        text-align: center;
+    }
 </style>
 
 
