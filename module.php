@@ -8,6 +8,22 @@ class CommitteesModule extends Module {
 
         parent::__construct();
     }
+
+
+    public function list() {
+
+        $committees = loadApi()->query("SELECT Id, Name FROM Committee__c")->getRecords();
+
+        foreach($committees as &$committee) {
+            
+            $machineName = Identifier::toMachineName($committee["Name"]);
+            $committee["URL"] = "/committee/$machineName";
+        }
+
+        $tpl = new Template("list");
+        $tpl->addPath(__DIR__ . "/templates");
+        return $tpl->render(["committees" => $committees]);
+    }
     
 
     public function view($name = "web-governance") {
