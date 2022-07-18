@@ -40,8 +40,9 @@ class CommitteesModule extends Module {
         $page->addPath(__DIR__ . "/templates");
 
         return $page->render([
-            "documents" => $docsHtml,
-            "members" => $membersHtml
+            "committeeName" => $cname,
+            "documents"     => $docsHtml,
+            "members"       => $membersHtml
         ]);
     }
 
