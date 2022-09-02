@@ -29,28 +29,17 @@ class CommitteesModule extends Module {
     public function view($name = "web-governance") {
         
         $cname = Identifier::format($name, "human");
-        // print $committeeName; exit;
         
         $id = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$cname'")->getRecord()["Id"];
-
-        $documents = $this->getDocuments($id);
-
-        /*
-        if($targets->count() == 0) {
-			$tpl = new Template("no-records");
-			$tpl->addPath(__DIR__ . "/templates");
-			return $tpl;
-		}
-        */
-
-        $docsTemplate = new Template("documents");
-        $docsTemplate->addPath(__DIR__ . "/templates");
-        $docsHtml = $docsTemplate->render(["documents" => $documents]);
 
         $members = $this->getMembers($id);
         $membersTemplate = new Template("members");
         $membersTemplate->addPath(__DIR__ . "/templates");
         $membersHtml = $membersTemplate->render(["members" => $members]);
+
+        // Get the list of documents from the file service module.
+        $service = new FileServiceModule();
+        $docsHtml = $service->list($id);
 
         $page = new Template("page");
         $page->addPath(__DIR__ . "/templates");
@@ -61,25 +50,7 @@ class CommitteesModule extends Module {
             "members"       => $membersHtml
         ]);
     }
-
-    public function getDocuments($id) {
-
-        $api = loadApi();
-
-        $result = $api->query("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = '$id'")->getQueryResult();
-        $docIds = $result->getField("ContentDocumentId");
-
-        $format = "SELECT Id, Title, ContentSize, FileType, FileExtension FROM ContentDocument WHERE Id in (:array)";
-        $query = DbHelper::parseArray($format, $docIds);
-        $docs = $api->query($query)->getRecords();
-
-        foreach($docs as &$doc) {
-
-            $doc["fileSize"] = calculateFileSize($doc["ContentSize"]);
-        }
-
-        return $docs;
-    }
+    
 
     public function getMembers($id) {
 
