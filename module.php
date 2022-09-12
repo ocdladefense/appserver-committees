@@ -26,11 +26,14 @@ class CommitteesModule extends Module {
     }
     
 
-    public function view($name = "web-governance") {
+    public function view($name) {
+        
         
         $cname = Identifier::format($name, "human");
         
         $id = loadApi()->query("SELECT Id FROM Committee__c WHERE Name = '$cname'")->getRecord()["Id"];
+
+        if(empty($id)) throw new Exception("Committee name is expected.");
 
         $members = $this->getMembers($id);
         $membersTemplate = new Template("members");
@@ -46,8 +49,8 @@ class CommitteesModule extends Module {
 
         return $page->render([
             "committeeName" => $cname,
-            "documents"     => $docsHtml,
-            "members"       => $membersHtml
+            "members"       => $membersHtml,
+            "documents"     => $docsHtml
         ]);
     }
     

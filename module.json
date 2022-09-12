@@ -13,10 +13,6 @@
         "committee/%name":{
             "callback":"view",
             "content-type":"text/html"
-        },
-        "committee":{
-            "callback":"view",
-            "content-type":"text/html"
         }
     }
 }
